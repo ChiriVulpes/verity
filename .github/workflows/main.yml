@@ -39,7 +39,7 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: deploy
-          build_dir: "."
+          build_dir: "out"
           jekyll: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
