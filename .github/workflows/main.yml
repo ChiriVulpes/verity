@@ -27,10 +27,12 @@ jobs:
           npm ci
           cd ..
 
+      - name: Create .env file
+        run: |
+          echo "ORIGIN=${{ vars.ORIGIN }}" > .env
+
       - name: Build
         run: npx task build
-        env:
-          ORIGIN: ${{ vars.ORIGIN }}
       
       - name: Prepare for GitHub Pages
         if: success()
