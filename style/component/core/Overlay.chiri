@@ -1,0 +1,20 @@
+.overlay:
+	%block
+	%absolute
+	%inset-0
+	background: #222a
+	%z-index-fg-2
+	%padding-top-5
+	%padding-inline-4
+	%transparent
+	#transition: #{transition("opacity")}
+	%backdrop-blur
+	%pointer-events-none
+	margin-top: ${overlay-scroll-margin-top: 0px}
+	; transition-duration: 100s
+
+	&--visible:
+		#after: .overlay
+		%opaque
+		%pointer-events-all
+		%margin-top-0

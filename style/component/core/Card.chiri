@@ -1,0 +1,41 @@
+.card:
+	%block
+	%relative
+	%z-index-fg
+	%padding-inline-4
+	max-width: calc($space-8 + $space-5)
+
+	@before:
+		%absolute
+		%inset-0
+		%z-index-bg
+		%backdrop-blur
+		background: #{alpha(.25, $background-1)}
+
+	&-header:
+		%block
+		%width-100
+		%unmargin-inline-4
+		%padding-inline-4
+		background: #{alpha(.5, $background-3)}
+		%border-bottom-2
+		%uppercase
+		%padding-block-1
+		%letter-spacing-3
+		%weight-semibold
+		%font-3
+		%colour-6
+
+		&-text:
+			%font-vertical-align
+
+		:scheme light:
+			%border-colour-6
+
+	&-description:
+		#after: .paragraph, .lore
+
+		&--flush:
+			#after: .card-description
+			%colour-4
+			%margin-top-0

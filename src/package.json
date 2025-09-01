@@ -1,0 +1,8 @@
+{
+	"name": "verity",
+	"version": "1.0.0",
+	"private": true,
+	"devDependencies": {
+		"kitsui": "github:fluff4me/kitsui#package"
+	}
+}

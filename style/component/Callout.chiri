@@ -1,0 +1,113 @@
+.callout-list:
+	%flex
+	%gap-4
+	%justify-content-centre
+
+.callout:
+	%flex
+	%flex-column
+	%gap-2
+	$callout-button-size: calc($space-4 + $space-2)
+	$callout-button-gap: $space-2
+	$callout-button-list-width: calc($callout-button-size * 3 + $callout-button-gap * 2 + 2px * 3)
+	width: calc($callout-button-list-width + $space-4)
+	%align-items-centre
+	%padding-bottom-3
+
+	&-button-list:
+		%flex
+		%flex-wrap
+		width: $callout-button-list-width
+		gap: $callout-button-gap
+
+	&-button:
+		#after: .button
+		size: $callout-button-size
+		%padding-0
+		colour: transparent
+		%box-shadow-none
+		%background-none
+		#transition: #{transition("background")}, #{transition("box-shadow")}, #{transition("color")}, #{transition("filter")}
+		filter: grayscale(1)
+
+		&-checkbox:
+			%hidden
+
+		::hover, ::focus:
+			colour: #fff
+			%transition-focus
+			filter: grayscale(1) contrast(2) brightness(1.5)
+
+		&--checked:
+			#after: .callout-button
+			background: #d3242433
+			colour: #ff5252
+			filter: none
+
+			::hover, ::focus:
+				colour: #fff
+
+			@before:
+				colour: #fff
+
+		&-image:
+			%z-index-fg
+
+	&-preview:
+		%block
+		%margin-auto
+		%unmargin-top-3
+		size: calc($callout-button-size * $callout-button-option-count + $callout-button-gap * ($callout-button-option-count - 1))
+
+	&-label:
+		%uppercase
+		%letter-spacing-2
+		%block
+		%width-100
+		%text-align-centre
+
+		&--dupe:
+			colour: #ff5252
+			%decoration-strikethrough
+
+	&-text:
+		%font-9
+		%uppercase
+		%weight-bold
+		%unmargin-top-4
+		%padding-top-2
+		%block
+		%width-100
+		%text-align-centre
+		padding-block: calc($space-3 + $space-2)
+		%flex
+		%justify-content-centre
+
+		&--doubled:
+			#after: .callout-text
+			%gap-4
+
+		&-letter:
+			%flex
+			%width-5
+			%height-cap
+			%relative
+			%justify-content-centre
+			%align-items-centre
+
+			&--doubled:
+				#after: .callout-text-letter
+				%width-6
+
+			&--dupe:
+				colour: #a14646
+
+				@before:
+					%block
+					%absolute
+					%width-2
+					height: 130%
+					%left-50
+					background: #ff5252
+					translate: -50% .05em
+					rotate: z 25deg

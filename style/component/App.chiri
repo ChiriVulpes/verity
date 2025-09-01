@@ -1,0 +1,136 @@
+.app:
+	%flex
+	%flex-column
+	%flex-wrap
+	%gap-3
+	max-height: calc(100vh - $space-5)
+	%border-box
+	%justify-content-centre
+
+	&-header:
+		%absolute
+		%top-5
+		%left-5
+		%flex
+		%flex-column
+		%z-index-fg
+		%gap-1
+		%scheme-dark
+
+		&-title:
+			%font-9
+			%uppercase
+			%weight-bold
+			%letter-spacing-2
+			%height-cap
+			%flex
+			%align-items-centre
+			%unmargin-left-1
+			%colour-0
+
+		&-subtitle:
+			%colour-3
+
+		@before:
+			%block
+			%absolute
+			%border-1
+			%border-colour-8
+			%width-5
+			height: calc($space-5 + $space-3)
+			%unleft-2
+			%top-3
+			%z-index-bg
+
+		@after:
+			%block
+			%height-1
+			%width-4
+			background: $colour-6
+
+	@before, @after:
+		%block
+		%absolute
+		%inset-0
+		%top-auto
+		%height-5
+
+	@before:
+		background: #650a06
+		%transparent
+		#transition: #{transition("opacity")}
+
+	@after:
+		%right-auto
+		%width-0
+		background: #b51106
+
+	&--resetting:
+
+		@before:
+			%opaque
+			%transition-focus
+
+		@after:
+			#animate 500ms forwards:
+				to: width: 100%
+
+	&-card:
+		#after: .card
+		%outline-none
+		%backdrop-blur-6
+		background: #{alpha(.6, $background-3)}
+		#transition: #{transition("background")}
+
+		:scheme dark:
+			%text-shadow
+			%text-shadow-intensity-5
+
+		&-header:
+			%text-shadow-none
+			; colour: ${card-header-colour: 
+
+		@before:
+			%inset-border-1
+			%z-index-fg
+			%backdrop-filter-none
+			%background-none
+			%pointer-events-none
+			$border-colour: transparent
+			#transition: #{transition("border")}
+
+		@after:
+			%block
+			%absolute
+			%uninset-3
+			%border-2
+			%border-colour-15
+			%pointer-events-none
+			%transparent
+			#transition: #{transition("opacity")}, #{transition("inset")}
+
+		&--focus:
+			background: #{alpha(.4, $background-1)}
+			%transition-focus
+
+			@before:
+				%border-colour-15
+				%transition-focus
+
+			@after:
+				%uninset-1
+				%opaque
+				%transition-focus
+
+		&-heading:
+			%font-5
+			%uppercase
+			%letter-spacing-3
+			%weight-bold
+			%height-cap
+			%block
+
+	&-break:
+		%block
+		height: 100vh
+		%width-1

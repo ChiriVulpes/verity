@@ -1,0 +1,48 @@
+.path:
+	%grid
+	grid-template-columns: auto 1fr
+	%gap-2
+	%padding-3
+	%padding-bottom-4
+	%unmargin-top-2
+	%align-items-centre
+	%relative
+
+	@before:
+		%block
+		%absolute
+		%inset-0
+		%bottom-3
+		%z-index-bg
+		background: #{alpha(.6, $background-3)}
+
+	&-swap:
+		%grid
+		%columns-subgrid
+		%column-1-2
+
+		&-number:
+			%flex
+			%font-7
+			%weight-bold
+			%height-cap
+			%align-items-centre
+			%padding-top-1
+			margin-top: -.02em
+
+		&-instructions:
+			%flex
+			%flex-column
+			%gap-1
+			%font-2
+			%letter-spacing-1
+
+			&-step-group:
+				%flex
+				%flex-column
+
+			&-step:
+
+				&--side:
+					%colour-2
+					%italic-2

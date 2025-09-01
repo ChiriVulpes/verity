@@ -1,0 +1,44 @@
+~shared
+
+title: Verity
+subtitle: deepsight.gg
+
+shape/orbicular: Orbicular
+shape/quadrate: Quadrate
+shape/trigon: Trigon
+
+shape/cuboid: Cuboid
+shape/spheric: Spheric
+shape/pyramidic: Pyramidic
+shape/conoid: Conoid
+shape/cylindric: Cylindric
+shape/trilateral: Trilateral
+
+# card/callout
+title: The Shadows
+description: Three members of your fireteam are prisoners, separated into mirror versions of the room. Their three statues are holding Shadows — have them tell you which, left to right. {#B:Input their Shadows, or type the first letter of each Shadow's shape, sequentially} — for example, {0}.
+
+# card/truth
+title: The Reality
+description: Outside, in reality, the rest of your fireteam see the same statues, but here each statue holds a three-dimensional shape. These need to be "dissected" into different shapes based on the Shadows above — forming the True shapes for each prisoner. {#B:Left to right, input the initial three-dimensional shapes.}
+
+# card/inside-goal
+title: Understanding the Truth
+description: {#B:Each prisoner must obtain the other two Shadows} from the others imprisoned, and form an understanding of the Truth — {#B:they must form a three-dimensional shape without the shape their statue held.} For example, if their statue held an Orbicular Shadow, they could form their shape from a Trigon Shadow and a Quadrate Shadow — a Trilateral.
+
+# card/outside-goal
+title: Leaving the Door Open
+description: To bring your fireteam out into reality, their statue in reality must match the prisoner's understanding of the Truth. {#B:Dissect two three-dimensional shapes with Shadow components to swap those components between the two prisoners' statues.} This process must be repeated until all statues hold the prisoners' True shapes.
+has-dupe/title: No way out...
+has-dupe/description: {#B:One or more callouts were incorrect or miscommunicated.}
+
+path/orbicular: Obtain an {#B:Orbicular Splinter} from the {#B:left Curator}.
+path/trigon: Obtain a {#B:Trigon Splinter} from the {#B:middle Curator}.
+path/quadrate: Obtain a {#B:Quadrate Splinter} from the {#B:right Curator}.
+path/dissect-select: Select the {#B:{0} statue} for dissection.
+path/dissect-complete: Dissect the {#B:{0} statue} to swap the components.
+path/dissect-result: The statue now holds {#B:{0}}.
+path/ogres: Stop the ogres to summon more Splintered Curators.
+path/left: left
+path/middle: middle
+path/right: right

@@ -1,0 +1,38 @@
+#import: chiri:defaults
+
+#import:
+	var/font
+	var/colours
+
+#import: root
+
+#import:
+	utility/ViewTransition
+
+#import:
+	component/core/Paragraph
+	component/core/Lore
+	component/core/Card
+	component/core/Loading
+	component/core/Checkbox
+	component/core/Checklist
+	component/core/Button
+	component/core/Footer
+	component/core/ActionRow
+	component/core/FormRow
+	component/core/TextInput
+	component/core/Details
+	component/core/Break
+	component/core/Code
+	component/core/View
+	component/core/Icon
+	component/core/Image
+	component/core/Popover
+	component/core/Dialog
+	component/core/Tooltip
+	component/core/Overlay
+
+#import:
+	component/Callout
+	component/Path
+	component/App
