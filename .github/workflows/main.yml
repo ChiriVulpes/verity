@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: npx task build
         env:
-          ORIGIN: ${{ env.ORIGIN }}
+          ORIGIN: ${{ vars.ORIGIN }}
       
       - name: Prepare for GitHub Pages
         if: success()
