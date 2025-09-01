@@ -2,3 +2,5 @@ node_modules/
 out/
 .env
 src/bundle/
+src/lang/index.d.ts
+src/style/index.d.ts
