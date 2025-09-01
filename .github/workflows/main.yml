@@ -29,6 +29,8 @@ jobs:
 
       - name: Build
         run: npx task build
+        env:
+          ORIGIN: ${{ env.ORIGIN }}
       
       - name: Prepare for GitHub Pages
         if: success()
