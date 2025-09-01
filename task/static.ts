@@ -11,4 +11,5 @@ export default Task('static', async task => {
 	await fs.cp('static', 'out/static', { recursive: true, force: true })
 	const index = await fs.readFile('index.html', 'utf8')
 	await fs.writeFile('out/index.html', index.replaceAll('./', `${(Env.ORIGIN ?? `https://localhost:${Env.PORT}`)}/`))
+	if (Env.ORIGIN) await fs.writeFile('out/CNAME', Env.ORIGIN.replace(/^https?:\/\//, ''))
 })
