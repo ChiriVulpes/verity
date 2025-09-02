@@ -3,16 +3,29 @@
 title: Verity
 subtitle: deepsight.gg
 
-shape/orbicular: Orbicular
-shape/quadrate: Quadrate
-shape/trigon: Trigon
+# shape
+orbicular: Orbicular
+quadrate: Quadrate
+trigon: Trigon
 
-shape/cuboid: Cuboid
-shape/spheric: Spheric
-shape/pyramidic: Pyramidic
-shape/conoid: Conoid
-shape/cylindric: Cylindric
-shape/trilateral: Trilateral
+cuboid: Cuboid
+spheric: Spheric
+pyramidic: Pyramidic
+conoid: Conoid
+cylindric: Cylindric
+trilateral: Trilateral
+
+# icon/shape
+orbicular: {#ICON:orbicular}
+quadrate: {#ICON:quadrate}
+trigon: {#ICON:trigon}
+
+cuboid: {#ICON:cuboid}
+spheric: {#ICON:spheric}
+pyramidic: {#ICON:pyramidic}
+conoid: {#ICON:conoid}
+cylindric: {#ICON:cylindric}
+trilateral: {#ICON:trilateral}
 
 # card/callout
 title: The Shadows
@@ -32,13 +45,13 @@ description: To bring your fireteam out into reality, their statue in reality mu
 has-dupe/title: No way out...
 has-dupe/description: {#B:One or more callouts were incorrect or miscommunicated.}
 
-path/orbicular: Obtain an {#B:Orbicular Splinter} from the {#B:left Curator}.
-path/trigon: Obtain a {#B:Trigon Splinter} from the {#B:middle Curator}.
-path/quadrate: Obtain a {#B:Quadrate Splinter} from the {#B:right Curator}.
+path/orbicular: Obtain an {#ICON:orbicular} {#B:Orbicular Splinter} from the {#ICON:left} {#B:left Curator}.
+path/trigon: Obtain a {#ICON:trigon} {#B:Trigon Splinter} from the {#ICON:middle} {#B:middle Curator}.
+path/quadrate: Obtain a {#ICON:quadrate} {#B:Quadrate Splinter} from the {#ICON:right} {#B:right Curator}.
 path/dissect-select: Select the {#B:{0} statue} for dissection.
 path/dissect-complete: Dissect the {#B:{0} statue} to swap the components.
-path/dissect-result: The statue now holds {#B:{0}}.
+path/dissect-result: The statue now holds {1 ??}{#B:{0}}.
 path/ogres: Stop the ogres to summon more Splintered Curators.
-path/left: left
-path/middle: middle
-path/right: right
+path/left: {#ICON:left} left
+path/middle: {#ICON:middle} middle
+path/right: {#ICON:right} right

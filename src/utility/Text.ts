@@ -1,3 +1,4 @@
+import Icon from 'component/core/Icon'
 import { Component, State } from 'kitsui'
 import { StringApplicatorSource } from 'kitsui/utility/StringApplicator'
 import type { Quilt, Weave, Weft } from 'lang'
@@ -26,24 +27,43 @@ namespace Text {
 		})
 	}
 
+	export function isWeave (weave: Weave | Weft): weave is Weave {
+		return Object.keys(weave).includes('toString')
+	}
+
 	export function renderWeave (weave: Weave): Node[] {
 		return weave.content.map(renderWeft)
 	}
 
+	export function toString (weave: Weave | Weft | WeavingArg): string {
+		return quilt.value['shared/passthrough'](weave).toString()
+	}
+
+	const voidElements = new Set([
+		'AREA', 'BASE', 'BR', 'COL', 'EMBED', 'HR', 'IMG', 'INPUT',
+		'LINK', 'META', 'PARAM', 'SOURCE', 'TRACK', 'WBR',
+	])
 	function renderWeft (weft: Weft): Node {
 		if (isPlaintextWeft(weft))
 			return document.createTextNode(weft.content)
 
 		const tag = weft.tag?.toLowerCase()
 
-		let element = !tag ? undefined : createTagElement(tag)
+		let element = !tag ? undefined : createTagElement(tag, weft)
 		element ??= document.createElement('span')
 
-		if (Array.isArray(weft.content))
+		if (voidElements.has(element.tagName)) {
+			// :3
+		}
+		else if (Array.isArray(weft.content))
 			element.append(...weft.content.map(renderWeft))
 		else if (typeof weft.content === 'object' && weft.content) {
-			if (!WeavingArg.isRenderable(weft.content))
-				element.append(...renderWeave(weft.content))
+			if (!WeavingArg.isRenderable(weft.content)) {
+				if (isWeave(weft.content))
+					element.append(...renderWeave(weft.content))
+				else
+					element.append(renderWeft(weft.content))
+			}
 			else if (Component.is(weft.content))
 				element.append(weft.content.element)
 			else if (weft.content instanceof Node)
@@ -72,7 +92,7 @@ namespace Text {
 			&& !weft.tag
 	}
 
-	export function createTagElement (tag: string): HTMLElement | undefined {
+	export function createTagElement (tag: string, weft?: Weft): HTMLElement | undefined {
 		tag = tag.toLowerCase()
 
 		if (tag.startsWith('link(')) {
@@ -97,13 +117,15 @@ namespace Text {
 		// 			.element
 		// }
 
-		// if (tag.startsWith('icon.')) {
-		// 	const className = `button-icon-${tag.slice(5)}`
-		// 	if (className in style.value)
-		// 		return Component()
-		// 			.style('button-icon', className as keyof typeof style.value, 'button-icon--inline')
-		// 			.element
-		// }
+		if (tag === 'icon') {
+			const iconName = toString(weft)
+			if (!Icon.is(iconName)) {
+				console.warn('Unregistered icon', iconName)
+				return undefined
+			}
+
+			return Icon(iconName).element
+		}
 
 		switch (tag) {
 			case 'b': return document.createElement('strong')

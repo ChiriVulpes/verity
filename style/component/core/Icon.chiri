@@ -1,9 +1,5 @@
 .icon:
-	%weight-normal
-
-	&-power:
-		%relative
-		font-size: .35em
-		%vertical-align-super
-		top: .3em
-		margin-right: .1em
+	%height-lh
+	%vertical-align-middle
+	%relative
+	top: -.07em

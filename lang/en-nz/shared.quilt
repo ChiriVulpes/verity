@@ -1,4 +1,5 @@
 # shared
 errored: An error occurred
+passthrough: {0}
 
 load/connecting: Connecting...

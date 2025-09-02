@@ -14,23 +14,14 @@
 	component/core/Lore
 	component/core/Card
 	component/core/Loading
-	component/core/Checkbox
-	component/core/Checklist
 	component/core/Button
-	component/core/Footer
-	component/core/ActionRow
-	component/core/FormRow
-	component/core/TextInput
-	component/core/Details
 	component/core/Break
 	component/core/Code
-	component/core/View
 	component/core/Icon
 	component/core/Image
 	component/core/Popover
-	component/core/Dialog
 	component/core/Tooltip
-	component/core/Overlay
+	component/core/Dialog
 
 #import:
 	component/Callout

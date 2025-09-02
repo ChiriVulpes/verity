@@ -578,6 +578,9 @@ export default Component(component => {
 	//#endregion
 	////////////////////////////////////
 
+	////////////////////////////////////
+	//#region Path
+
 	BaseCard()
 		.style('app-card')
 		.tweak(card => card.header.style('app-card-header'))
@@ -691,12 +694,16 @@ export default Component(component => {
 						.style('path-swap-instructions-step')
 						.text.set(quilt => quilt['card/outside-goal/path/dissect-result'](
 							quilt[`shape/${newShape}`](),
+							quilt[`icon/shape/${newShape}`](),
 						))
 						.appendTo(stepGroup)
 				}
 			}
 		}))
 		.appendTo(app)
+
+	//#endregion
+	////////////////////////////////////
 
 	return component
 })
