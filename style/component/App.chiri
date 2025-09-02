@@ -7,6 +7,9 @@
 	%border-box
 	%justify-content-centre
 
+	:media (width < 1700px):
+		%flex-no-wrap
+
 	&-header:
 		%absolute
 		%top-5
@@ -134,3 +137,6 @@
 		%block
 		height: 100vh
 		%width-1
+
+		:media (width < 1700px):
+			%hidden
