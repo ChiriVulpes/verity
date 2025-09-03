@@ -152,6 +152,7 @@
 			%weight-bold
 			%height-cap
 			%block
+			%unmargin-top-3
 
 	&-break:
 		%block

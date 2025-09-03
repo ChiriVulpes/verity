@@ -629,8 +629,16 @@ export default Component(component => {
 				return
 			}
 
-			if (shadowCallout.replaceAll(' ', '').length < 3 || truthsCallout.join('').replaceAll(' ', '').length < 6)
+			if (shadowCallout.replaceAll(' ', '').length < 3 || truthsCallout.join('').replaceAll(' ', '').length < 6) {
+				Component()
+					.style('app-card-heading')
+					.text.set(quilt => quilt['card/outside-goal/compact/placeholder/title']())
+					.appendToWhen(displayMode.notEquals('full'), slot)
+				Paragraph().and(Lore)
+					.text.set(quilt => quilt['card/outside-goal/compact/placeholder/description']())
+					.appendToWhen(displayMode.notEquals('full'), slot)
 				return
+			}
 
 			// calc time
 			const targetMap: Record<CalloutLetter, Callout3D> = {

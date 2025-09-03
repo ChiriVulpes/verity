@@ -54,6 +54,8 @@ title: Leaving the Door Open
 description: To bring your fireteam out into reality, their statue in reality must match the prisoner's understanding of the Truth. {#B:Dissect two three-dimensional shapes with Shadow components to swap those components between the two prisoners' statues.} This process must be repeated until all statues hold the prisoners' True shapes.
 has-dupe/title: No way out...
 has-dupe/description: {#B:One or more callouts were incorrect or miscommunicated.}
+compact/placeholder/title: The silence is deafening...
+compact/placeholder/description: Fill out The Shadows and The Reality callouts to get a solution.
 
 path/ogres: Stop the ogres to summon more Splintered Curators.
 path/left: {#ICON:left} left
