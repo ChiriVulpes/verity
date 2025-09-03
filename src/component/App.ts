@@ -11,6 +11,11 @@ import InputBus from 'kitsui/utility/InputBus'
 export default Component(component => {
 	const app = component.style('app')
 
+	type DisplayMode = 'full' | 'compact' | 'icons'
+	const displayModeSetting = State<DisplayMode | null>(localStorage.getItem('displayMode') as DisplayMode | null)
+	displayModeSetting.useManual(setting => !setting ? localStorage.removeItem('displayMode') : localStorage.setItem('displayMode', setting))
+	const displayMode = displayModeSetting.mapManual(setting => setting ?? 'full')
+
 	Component()
 		.style('app-header')
 		.append(Component()
@@ -20,6 +25,21 @@ export default Component(component => {
 		.append(Component()
 			.style('app-header-subtitle')
 			.text.set(quilt => quilt['subtitle']())
+		)
+		.appendTo(app)
+
+	Component()
+		.style('app-settings')
+		.append(Button()
+			.style('app-settings-button')
+			.text.bind(displayMode.mapManual(displayMode => quilt => quilt[`settings/display-mode/${displayMode}`]()))
+			.event.subscribe('click', () => {
+				displayModeSetting.value = {
+					full: 'compact' as const,
+					compact: 'icons' as const,
+					icons: 'full' as const,
+				}[displayMode.value]
+			})
 		)
 		.appendTo(app)
 
@@ -78,32 +98,40 @@ export default Component(component => {
 
 	type CardState = 'complete' | 'modified' | 'reset'
 	interface CardExtensions {
-		getState (): CardState
+		getFormState?(): CardState
 	}
 
 	interface Card extends BaseCard, CardExtensions { }
 
 	const cards: Card[] = []
-	const Card = Component((component, getState: () => CardState): Card => {
+	const Card = Component((component, getFormState: (() => CardState) | null): Card => {
 		const card = component.and(BaseCard)
 			.style('app-card')
-			.tabIndex('auto')
+			.style.bind(displayMode.notEquals('full'), 'app-card--compact')
+			.tabIndex(getFormState ? 'auto' : undefined)
 			.appendTo(app)
 			.extend<CardExtensions>(card => ({
-				getState,
+				getFormState: getFormState || undefined,
 			}))
-		InputBus.event.subscribe('Down', (event, input) => {
-			if (!card.contains(input.targetElement))
-				return
 
-			if (input.targetElement?.closest('label, button, input'))
-				return
+		if (getFormState) {
+			InputBus.event.subscribe('Down', (event, input) => {
+				if (!card.contains(input.targetElement))
+					return
 
-			if (input.use('MouseLeft'))
-				FocusListener.focus(card.element, true)
-		})
+				if (input.targetElement?.closest('label, button, input'))
+					return
+
+				if (input.use('MouseLeft'))
+					FocusListener.focus(card.element, true)
+			})
+
+			card.style.bind(card.hasFocused, 'app-card--focus')
+		}
+
 		card.header.style('app-card-header')
-		card.style.bind(card.hasFocused, 'app-card--focus')
+			.style.bind(displayMode.notEquals('full'), 'app-card-header--compact')
+		card.description.appendToWhen(displayMode.equals('full'), card)
 		cards.push(card)
 		return card
 	})
@@ -115,7 +143,7 @@ export default Component(component => {
 	}
 
 	onReset.push(() => cards[0].focus())
-	resetPredicates.push(() => cards.every(card => card.getState() === 'reset'))
+	resetPredicates.push(() => cards.every(card => !card.getFormState || card.getFormState() === 'reset'))
 
 	app.onRooted(() => {
 		InputBus.event.subscribe('Down', (event, input) => {
@@ -131,7 +159,7 @@ export default Component(component => {
 			}
 
 			for (const card of cards)
-				if (card.getState() !== 'complete') {
+				if (card.getFormState && card.getFormState() !== 'complete') {
 					card.focus()
 					return
 				}
@@ -477,12 +505,10 @@ export default Component(component => {
 
 	Component().style('app-break').appendTo(app)
 
-	BaseCard()
-		.style('app-card')
-		.tweak(card => card.header.style('app-card-header'))
+	Card(null)
 		.tweak(card => card.headerText.set(quilt => quilt['card/inside-goal/title']()))
 		.tweak(card => card.descriptionText.set(quilt => quilt['card/inside-goal/description']()))
-		.appendTo(app)
+		.appendToWhen(displayMode.equals('full'), app)
 
 	type TruthsState = `${Callout3D}${Callout3D}${Callout3D}`
 	interface Node {
@@ -493,6 +519,7 @@ export default Component(component => {
 		components: Callout3D
 		positions: Partial<Record<CalloutLetter, 0 | 1 | 2>>
 	}
+	type Position = 'left' | 'middle' | 'right'
 	const statuePositions = ['left', 'middle', 'right'] as const
 
 	const graph = {} as Record<TruthsState, Node>
@@ -587,9 +614,7 @@ export default Component(component => {
 	////////////////////////////////////
 	//#region Path
 
-	BaseCard()
-		.style('app-card')
-		.tweak(card => card.header.style('app-card-header'))
+	Card(null)
 		.tweak(card => card.headerText.set(quilt => quilt['card/outside-goal/title']()))
 		.tweak(card => card.descriptionText.set(quilt => quilt['card/outside-goal/description']()))
 		.append(Slot().use(State.UseManual({ shadowCallout, truthsCallout, hasShadowDupe, hasTruthDupe }), (slot, { shadowCallout, truthsCallout, hasShadowDupe, hasTruthDupe }) => {
@@ -620,8 +645,6 @@ export default Component(component => {
 			if (!path)
 				throw new Error('No path found????')
 
-			console.log(path)
-
 			const swaps: Record<CalloutLetter, number> = { c: 0, s: 0, t: 0 }
 			const wrapper = Component().style('path').appendTo(slot)
 			for (let i = 0; i < path.length; i++) {
@@ -638,25 +661,29 @@ export default Component(component => {
 					.style('path-swap')
 					.append(Component()
 						.style('path-swap-number')
+						.style.bind(displayMode.equals('icons'), 'path-swap-number--icons')
 						.text.set(`${i + 1}`)
 					)
 					.appendTo(wrapper)
 
 				const swapInstructions = Component()
 					.style('path-swap-instructions')
+					.style.bindFrom(displayMode.map(slot, mode => `path-swap-instructions--${mode}` as const))
 					.appendTo(swapUI)
 
 				const swapComponents = swap.components.split('') as CalloutLetter[]
 				// ensure that when swap components are broken up between two rounds, the last round one goes first
 				swapComponents.sort((a, b) => swaps[a] - swaps[b])
 
+				let selectShape: Shape2D | undefined
+				let selectPos: Position | undefined
 				for (let j = 0; j < swapComponents.length; j++) {
 					const hadSwapsOfThisType = swaps[swapComponents[j]]++
 					if (hadSwapsOfThisType) {
 						Component()
 							.style('path-swap-instructions-step', 'path-swap-instructions-step--side')
 							.text.set(quilt => quilt['card/outside-goal/path/ogres']())
-							.appendTo(swapInstructions)
+							.appendToWhen(displayMode.notEquals('icons'), swapInstructions)
 						swaps.c = 0
 						swaps.s = 0
 						swaps.t = 0
@@ -670,8 +697,8 @@ export default Component(component => {
 					const shape = shadowCalloutMap[swapLetter]
 					Component()
 						.style('path-swap-instructions-step')
-						.text.set(quilt => quilt[`card/outside-goal/path/${shape}`]())
-						.appendTo(stepGroup)
+						.text.set(quilt => quilt[`card/outside-goal/path/full/${shape}`]())
+						.appendToWhen(displayMode.equals('full'), stepGroup)
 
 					const position = swap.positions[swapLetter]
 					const positionString = statuePositions[position!]
@@ -680,10 +707,21 @@ export default Component(component => {
 
 					if (j === 0) {
 						// dissect select
+						selectShape = shape
+						selectPos = positionString
+
 						Component()
 							.style('path-swap-instructions-step')
-							.text.set(quilt => quilt['card/outside-goal/path/dissect-select'](quilt[`card/outside-goal/path/${positionString}`]()))
-							.appendTo(stepGroup)
+							.text.set(quilt => quilt['card/outside-goal/path/full/dissect-select'](quilt[`card/outside-goal/path/${positionString}`]()))
+							.appendToWhen(displayMode.equals('full'), stepGroup)
+
+						Component()
+							.style('path-swap-instructions-step')
+							.text.set(quilt => quilt['card/outside-goal/path/compact/dissect'](
+								quilt[`card/outside-goal/path/${shape}`](),
+								quilt[`card/outside-goal/path/${positionString}`](),
+							))
+							.appendToWhen(displayMode.equals('compact'), stepGroup)
 						continue
 					}
 
@@ -692,17 +730,37 @@ export default Component(component => {
 					// dissect complete
 					Component()
 						.style('path-swap-instructions-step')
-						.text.set(quilt => quilt['card/outside-goal/path/dissect-complete'](
+						.text.set(quilt => quilt['card/outside-goal/path/full/dissect-complete'](
 							quilt[`card/outside-goal/path/${positionString}`](),
 						))
-						.appendTo(stepGroup)
+						.appendToWhen(displayMode.equals('full'), stepGroup)
+
+					Component()
+						.style('path-swap-instructions-step')
+						.text.set(quilt => quilt['card/outside-goal/path/compact/dissect'](
+							quilt[`card/outside-goal/path/${shape}`](),
+							quilt[`card/outside-goal/path/${positionString}`](),
+						))
+						.appendToWhen(displayMode.equals('compact'), stepGroup)
+
 					Component()
 						.style('path-swap-instructions-step')
 						.text.set(quilt => quilt['card/outside-goal/path/dissect-result'](
 							quilt[`shape/${newShape}`](),
 							quilt[`icon/shape/${newShape}`](),
 						))
-						.appendTo(stepGroup)
+						.appendToWhen(displayMode.notEquals('icons'), stepGroup)
+
+					Component()
+						.style('path-swap-instructions-step')
+						.text.set(quilt => quilt['card/outside-goal/path/icons/dissect']({
+							SELECT_SHAPE: quilt[`icon/shape/${selectShape!}`](),
+							SELECT_POS: quilt[`icon/pos/${selectPos!}`](),
+							SWAP_SHAPE: quilt[`icon/shape/${shape}`](),
+							SWAP_POS: quilt[`icon/pos/${positionString}`](),
+							NEW_SHAPE: quilt[`icon/shape/${newShape}`](),
+						}))
+						.appendToWhen(displayMode.equals('icons'), stepGroup)
 				}
 			}
 		}))

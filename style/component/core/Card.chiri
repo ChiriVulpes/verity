@@ -3,7 +3,7 @@
 	%relative
 	%z-index-fg
 	%padding-inline-4
-	max-width: calc($space-8 + $space-5)
+	width: calc($space-8 + $space-5)
 
 	@before:
 		%absolute

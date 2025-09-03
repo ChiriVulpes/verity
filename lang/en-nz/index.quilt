@@ -3,6 +3,11 @@
 title: Verity
 subtitle: deepsight.gg
 
+# settings
+display-mode/full: Display Mode: Full
+display-mode/compact: Display Mode: Compact
+display-mode/icons: Display Mode: Icons
+
 # shape
 orbicular: Orbicular
 quadrate: Quadrate
@@ -14,6 +19,11 @@ pyramidic: Pyramidic
 conoid: Conoid
 cylindric: Cylindric
 trilateral: Trilateral
+
+# icon/pos
+left: {#ICON:left}
+middle: {#ICON:middle}
+right: {#ICON:right}
 
 # icon/shape
 orbicular: {#ICON:orbicular}
@@ -45,13 +55,21 @@ description: To bring your fireteam out into reality, their statue in reality mu
 has-dupe/title: No way out...
 has-dupe/description: {#B:One or more callouts were incorrect or miscommunicated.}
 
-path/orbicular: Obtain an {#ICON:orbicular} {#B:Orbicular Splinter} from the {#ICON:left} {#B:left Curator}.
-path/trigon: Obtain a {#ICON:trigon} {#B:Trigon Splinter} from the {#ICON:middle} {#B:middle Curator}.
-path/quadrate: Obtain a {#ICON:quadrate} {#B:Quadrate Splinter} from the {#ICON:right} {#B:right Curator}.
-path/dissect-select: Select the {#B:{0} statue} for dissection.
-path/dissect-complete: Dissect the {#B:{0} statue} to swap the components.
-path/dissect-result: The statue now holds {1 ??}{#B:{0}}.
 path/ogres: Stop the ogres to summon more Splintered Curators.
 path/left: {#ICON:left} left
 path/middle: {#ICON:middle} middle
 path/right: {#ICON:right} right
+path/orbicular: an {#ICON:orbicular} {#B:Orbicular Splinter}
+path/trigon: a {#ICON:trigon} {#B:Trigon Splinter}
+path/quadrate: a {#ICON:quadrate} {#B:Quadrate Splinter}
+path/dissect-result: The statue now holds {1 ??}{#B:{0}}.
+
+path/full/orbicular: Obtain an {#ICON:orbicular} {#B:Orbicular Splinter} from the {#ICON:left} {#B:left Curator}.
+path/full/trigon: Obtain a {#ICON:trigon} {#B:Trigon Splinter} from the {#ICON:middle} {#B:middle Curator}.
+path/full/quadrate: Obtain a {#ICON:quadrate} {#B:Quadrate Splinter} from the {#ICON:right} {#B:right Curator}.
+path/full/dissect-select: Select the {#B:{0} statue} for dissection.
+path/full/dissect-complete: Dissect the {#B:{0} statue} to swap the components.
+
+path/compact/dissect: Dissect {0} on the {#B:{1} statue}.
+
+path/icons/dissect: {SELECT_SHAPE} {SELECT_POS} / {SWAP_SHAPE} {SWAP_POS} = {NEW_SHAPE}

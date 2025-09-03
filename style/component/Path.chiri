@@ -30,12 +30,23 @@
 			%padding-top-1
 			margin-top: -.02em
 
+			&--icons:
+				#after: .path-swap-number
+				%padding-0
+				%margin-0
+				%align-self-centre
+
 		&-instructions:
 			%flex
 			%flex-column
 			%gap-1
 			%font-2
 			%letter-spacing-1
+
+			&--full:
+			&--compact:
+			&--icons:
+				%font-6
 
 			&-step-group:
 				%flex

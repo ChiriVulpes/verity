@@ -78,6 +78,21 @@
 			#animate 500ms forwards:
 				to: width: 100%
 
+	&-settings:
+		%flex
+		%flex-column
+		%absolute
+		%top-5
+		%right-5
+
+		&-button:
+			#after: .button
+			%font-1
+			%padding-1-2
+			%border-none
+			%box-shadow-none
+			%background-none
+
 	&-card:
 		#after: .card
 		%outline-none
@@ -88,10 +103,6 @@
 		:scheme dark:
 			%text-shadow
 			%text-shadow-intensity-5
-
-		&-header:
-			%text-shadow-none
-			; colour: ${card-header-colour: 
 
 		@before:
 			%inset-border-1
@@ -112,6 +123,8 @@
 			%transparent
 			#transition: #{transition("opacity")}, #{transition("inset")}
 
+		&--compact:
+
 		&--focus:
 			background: #{alpha(.4, $background-1)}
 			%transition-focus
@@ -124,6 +137,13 @@
 				%uninset-1
 				%opaque
 				%transition-focus
+
+		&-header:
+			%text-shadow-none
+			; colour: ${card-header-colour: 
+
+			&--compact:
+				margin-bottom: calc($space-3 + $space-2)
 
 		&-heading:
 			%font-5
