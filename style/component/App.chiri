@@ -64,6 +64,7 @@
 		%letter-spacing-2
 		%italic-2
 		%colour-2
+		%scheme-dark
 
 	@before, @after:
 		%block
@@ -100,6 +101,7 @@
 		%right-5
 		%gap-2
 		%align-items-end
+		%scheme-dark
 
 		&-button:
 			#after: .button

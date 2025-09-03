@@ -1,3 +1,10 @@
+#each in 0...15 as var i:
+	#string angle = "-80deg
+	$background-#{i}: oklch(from light-dark($light-#{i}, $dark-#{i}) l calc(c + .04) #{angle})
+	$background-interact-#{i}: oklch(from light-dark($light-#{5 - i}, $dark-#{i}) l calc(c + .04) #{angle})
+	$color-#{i}: oklch(from light-dark($dark-#{i}, $light-#{i}) l calc(c + .04) #{angle})
+	$colour-#{i}: oklch(from light-dark($dark-#{i}, $light-#{i}) l calc(c + .04) #{angle})
+
 #string colour-rarity-common-1 = "#c2bcb4
 #string colour-rarity-common-2 = "#dddddd
 #string colour-rarity-common-3 = "#eeeeee
