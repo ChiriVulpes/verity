@@ -47,9 +47,7 @@ namespace Text {
 		if (isPlaintextWeft(weft))
 			return document.createTextNode(weft.content)
 
-		const tag = weft.tag?.toLowerCase()
-
-		let element = !tag ? undefined : createTagElement(tag, weft)
+		let element = !weft.tag ? undefined : createTagElement(weft.tag, weft)
 		element ??= document.createElement('span')
 
 		if (voidElements.has(element.tagName)) {
@@ -93,10 +91,11 @@ namespace Text {
 	}
 
 	export function createTagElement (tag: string, weft?: Weft): HTMLElement | undefined {
+		const unlowercased = tag
 		tag = tag.toLowerCase()
 
 		if (tag.startsWith('link(')) {
-			let href = tag.slice(5, -1)
+			let href = unlowercased.slice(5, -1)
 			// const link = href.startsWith('/')
 			// 	? Link(href as RoutePath)
 			// 	: ExternalLink(href)
