@@ -51,6 +51,20 @@
 			%width-4
 			background: $colour-6
 
+	&-more:
+		%block
+		%absolute
+		%bottom-4
+		%left-5
+		%font-0
+		%text-shadow
+		background: #{alpha(.15, $background-1)}
+		%padding-2-3
+		%backdrop-blur-4
+		%letter-spacing-2
+		%italic-2
+		%colour-2
+
 	@before, @after:
 		%block
 		%absolute

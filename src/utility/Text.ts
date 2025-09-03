@@ -105,6 +105,7 @@ namespace Text {
 				href = `https://${href}`
 
 			return Component('a')
+				.style('link')
 				.attributes.set('href', href)
 				.element
 		}

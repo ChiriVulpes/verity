@@ -2,6 +2,10 @@
 
 title: Verity
 subtitle: deepsight.gg
+more:
+	Hold {#CODE:Escape} to reset.
+	Icons from {#LINK(www.reddit.com/r/destiny2/comments/1deahpk/salvations_edge_verity_shape_guide_reference/):Verity Shape Guide Reference} by Nec.
+	Lore from {#LINK(youtu.be/iUpnkcRFGHw):The Hidden Truth Behind Verity} by Abaddon.
 
 # settings
 display-mode/full: Display Mode: Full
@@ -74,4 +78,4 @@ path/full/dissect-complete: Dissect the {#B:{0} statue} to swap the components.
 
 path/compact/dissect: Dissect {0} on the {#B:{1} statue}.
 
-path/icons/dissect: {SELECT_SHAPE} {SELECT_POS} / {SWAP_SHAPE} {SWAP_POS} = {NEW_SHAPE}
+path/icons/dissect: {SELECT_SHAPE} {SELECT_POS} / {SWAP_SHAPE} {SWAP_POS} = {NEW_SHAPE_LEFT} {NEW_SHAPE_MIDDLE} {NEW_SHAPE_RIGHT}

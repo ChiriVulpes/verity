@@ -29,6 +29,11 @@ export default Component(component => {
 		.appendTo(app)
 
 	Component()
+		.style('app-more')
+		.text.set(quilt => quilt['more']())
+		.appendToWhen(displayMode.equals('full'), app)
+
+	Component()
 		.style('app-settings')
 		.append(Button()
 			.style('app-settings-button')
@@ -734,6 +739,9 @@ export default Component(component => {
 					}
 
 					const newShape = callout3DMap[currentNode.slice(position! * 2, position! * 2 + 2) as Callout3D]
+					const newShapeLeft = callout3DMap[currentNode.slice(0, 2) as Callout3D]
+					const newShapeMiddle = callout3DMap[currentNode.slice(2, 4) as Callout3D]
+					const newShapeRight = callout3DMap[currentNode.slice(4, 6) as Callout3D]
 
 					// dissect complete
 					Component()
@@ -766,7 +774,9 @@ export default Component(component => {
 							SELECT_POS: quilt[`icon/pos/${selectPos!}`](),
 							SWAP_SHAPE: quilt[`icon/shape/${shape}`](),
 							SWAP_POS: quilt[`icon/pos/${positionString}`](),
-							NEW_SHAPE: quilt[`icon/shape/${newShape}`](),
+							NEW_SHAPE_LEFT: quilt[`icon/shape/${newShapeLeft}`](),
+							NEW_SHAPE_MIDDLE: quilt[`icon/shape/${newShapeMiddle}`](),
+							NEW_SHAPE_RIGHT: quilt[`icon/shape/${newShapeRight}`](),
 						}))
 						.appendToWhen(displayMode.equals('icons'), stepGroup)
 				}
