@@ -8,6 +8,12 @@
 	%align-items-centre
 	%relative
 
+	&--icons:
+		#after: .path
+		grid-template-columns: auto auto
+		%width-fit
+		%margin-inline-auto
+
 	@before:
 		%block
 		%absolute
@@ -32,9 +38,11 @@
 
 			&--icons:
 				#after: .path-swap-number
-				%padding-0
-				%margin-0
-				%align-self-centre
+				margin-top: .12em
+				; %align-self-centre
+
+		&-hidden:
+			%transparent
 
 		&-instructions:
 			%flex
@@ -47,6 +55,11 @@
 			&--compact:
 			&--icons:
 				%font-6
+				%margin-bottom-3
+
+				&-result:
+					#after: .path-swap-instructions--icons
+					%margin-bottom-0
 
 			&-step-group:
 				%flex

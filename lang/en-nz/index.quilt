@@ -33,6 +33,7 @@ right: {#ICON:right}
 orbicular: {#ICON:orbicular}
 quadrate: {#ICON:quadrate}
 trigon: {#ICON:trigon}
+placeholder: {#ICON:placeholder}
 
 cuboid: {#ICON:cuboid}
 spheric: {#ICON:spheric}
@@ -78,4 +79,7 @@ path/full/dissect-complete: Dissect the {#B:{0} statue} to swap the components.
 
 path/compact/dissect: Dissect {0} on the {#B:{1} statue}.
 
-path/icons/dissect: {SELECT_SHAPE} {SELECT_POS} / {SWAP_SHAPE} {SWAP_POS} = {NEW_SHAPE_LEFT} {NEW_SHAPE_MIDDLE} {NEW_SHAPE_RIGHT}
+path/icons/dissect:
+	{CURRENT_LEFT} {CURRENT_MIDDLE} {CURRENT_RIGHT}
+	{LEFT_SHAPE} {MIDDLE_SHAPE} {RIGHT_SHAPE}
+path/icons/result: {CURRENT_LEFT} {CURRENT_MIDDLE} {CURRENT_RIGHT}

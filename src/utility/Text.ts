@@ -94,6 +94,13 @@ namespace Text {
 		const unlowercased = tag
 		tag = tag.toLowerCase()
 
+		if (tag === 'hidden')
+			return Component()
+				.style('hidden')
+				.ariaHidden()
+				.attributes.append('inert')
+				.element
+
 		if (tag.startsWith('link(')) {
 			let href = unlowercased.slice(5, -1)
 			// const link = href.startsWith('/')

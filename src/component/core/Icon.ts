@@ -16,6 +16,8 @@ enum EIcon {
 	left,
 	middle,
 	right,
+
+	placeholder,
 }
 
 type Icon = keyof typeof EIcon

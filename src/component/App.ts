@@ -658,15 +658,20 @@ export default Component(component => {
 			if (!path)
 				throw new Error('No path found????')
 
+			const wrapper = Component()
+				.style('path')
+				.style.bind(displayMode.equals('icons'), 'path--icons')
+				.appendTo(slot)
+
 			const swaps: Record<CalloutLetter, number> = { c: 0, s: 0, t: 0 }
-			const wrapper = Component().style('path').appendTo(slot)
 			for (let i = 0; i < path.length; i++) {
-				const lastNode = graph[path[i - 1] || initial]
+				const lastState = path[i - 1] || initial
+				const lastNode = graph[lastState]
 				if (!lastNode)
 					throw new Error('Last node is not in the graph??????')
 
-				const currentNode = path[i]
-				const swap = lastNode.connections.get(currentNode)
+				const currentState = path[i]
+				const swap = lastNode.connections.get(currentState)
 				if (!swap)
 					throw new Error('No connection between these two nodes?????????')
 
@@ -738,10 +743,10 @@ export default Component(component => {
 						continue
 					}
 
-					const newShape = callout3DMap[currentNode.slice(position! * 2, position! * 2 + 2) as Callout3D]
-					const newShapeLeft = callout3DMap[currentNode.slice(0, 2) as Callout3D]
-					const newShapeMiddle = callout3DMap[currentNode.slice(2, 4) as Callout3D]
-					const newShapeRight = callout3DMap[currentNode.slice(4, 6) as Callout3D]
+					const lastShapeLeft = callout3DMap[lastState.slice(0, 2) as Callout3D]
+					const lastShapeMiddle = callout3DMap[lastState.slice(2, 4) as Callout3D]
+					const lastShapeRight = callout3DMap[lastState.slice(4, 6) as Callout3D]
+					const newShape = callout3DMap[currentState.slice(position! * 2, position! * 2 + 2) as Callout3D]
 
 					// dissect complete
 					Component()
@@ -770,17 +775,41 @@ export default Component(component => {
 					Component()
 						.style('path-swap-instructions-step')
 						.text.set(quilt => quilt['card/outside-goal/path/icons/dissect']({
-							SELECT_SHAPE: quilt[`icon/shape/${selectShape!}`](),
-							SELECT_POS: quilt[`icon/pos/${selectPos!}`](),
-							SWAP_SHAPE: quilt[`icon/shape/${shape}`](),
-							SWAP_POS: quilt[`icon/pos/${positionString}`](),
-							NEW_SHAPE_LEFT: quilt[`icon/shape/${newShapeLeft}`](),
-							NEW_SHAPE_MIDDLE: quilt[`icon/shape/${newShapeMiddle}`](),
-							NEW_SHAPE_RIGHT: quilt[`icon/shape/${newShapeRight}`](),
+							CURRENT_LEFT: quilt[`icon/shape/${lastShapeLeft}`](),
+							CURRENT_MIDDLE: quilt[`icon/shape/${lastShapeMiddle}`](),
+							CURRENT_RIGHT: quilt[`icon/shape/${lastShapeRight}`](),
+							LEFT_SHAPE: quilt[`icon/shape/${selectPos === 'left' ? selectShape! : positionString === 'left' ? shape : 'placeholder'}`](),
+							MIDDLE_SHAPE: quilt[`icon/shape/${selectPos === 'middle' ? selectShape! : positionString === 'middle' ? shape : 'placeholder'}`](),
+							RIGHT_SHAPE: quilt[`icon/shape/${selectPos === 'right' ? selectShape! : positionString === 'right' ? shape : 'placeholder'}`](),
 						}))
 						.appendToWhen(displayMode.equals('icons'), stepGroup)
 				}
 			}
+
+			const endShapeLeft = callout3DMap[target.slice(0, 2) as Callout3D]
+			const endShapeMiddle = callout3DMap[target.slice(2, 4) as Callout3D]
+			const endShapeRight = callout3DMap[target.slice(4, 6) as Callout3D]
+			Component()
+				.style('path-swap')
+				.append(Component()
+					.style('path-swap-number', 'path-swap-number--icons')
+					.text.set('=')
+				)
+				.append(Component()
+					.style('path-swap-instructions', 'path-swap-instructions--icons', 'path-swap-instructions--icons-result')
+					.append(Component()
+						.style('path-swap-instructions-step-group')
+						.append(Component()
+							.style('path-swap-instructions-step')
+							.text.set(quilt => quilt['card/outside-goal/path/icons/result']({
+								CURRENT_LEFT: quilt[`icon/shape/${endShapeLeft}`](),
+								CURRENT_MIDDLE: quilt[`icon/shape/${endShapeMiddle}`](),
+								CURRENT_RIGHT: quilt[`icon/shape/${endShapeRight}`](),
+							}))
+						)
+					)
+				)
+				.appendToWhen(displayMode.equals('icons'), wrapper)
 		}))
 		.appendTo(app)
 

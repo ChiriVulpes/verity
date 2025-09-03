@@ -10,6 +10,7 @@
 	utility/ViewTransition
 
 #import:
+	component/core/Hidden
 	component/core/Link
 	component/core/Paragraph
 	component/core/Lore
