@@ -256,13 +256,17 @@ export default Component(component => {
 		shadowCallout.value = '   '
 	})
 
+	const shadowDupesMap = shadowCallout.mapManual(callout => {
+		return {
+			s: callout.replaceAll('s', '').length < 2,
+			c: callout.replaceAll('c', '').length < 2,
+			t: callout.replaceAll('t', '').length < 2,
+		}
+	})
 	const shadowDupes = Object.fromEntries((Object.keys(shadowCalloutMap) as CalloutLetter[])
-		.map(letter => [letter, getShadowDupedState(letter)])
+		.map(letter => [letter, shadowDupesMap.mapManual(map => map[letter])])
 	) as Record<CalloutLetter, State.Generator<boolean>>
-	function getShadowDupedState (letter: CalloutLetter) {
-		return shadowCallout.mapManual(callout => [...callout].filter(l => l === letter).length > 1)
-	}
-	const hasShadowDupe = State.MapManual(Object.values(shadowDupes), (...dupeBools) => dupeBools.includes(true))
+	const hasShadowDupe = shadowDupesMap.mapManual(dupes => Object.values(dupes).includes(true))
 
 	const mode = State<'oqt' | 'cst'>('cst')
 
@@ -374,15 +378,17 @@ export default Component(component => {
 		truthsCallout.value = ['  ', '  ', '  ']
 	})
 
+	const truthDupesMap = truthsCallout.mapManual(callouts => {
+		return {
+			s: callouts.flatMap(callout => [...callout]).filter(l => l === 's').length > 2,
+			c: callouts.flatMap(callout => [...callout]).filter(l => l === 'c').length > 2,
+			t: callouts.flatMap(callout => [...callout]).filter(l => l === 't').length > 2,
+		}
+	})
 	const truthDupes = Object.fromEntries((Object.keys(callout3DMap) as Callout3D[])
-		.map(callout => [callout, getTruthDupedState(callout)])
+		.map(callout => [callout, truthDupesMap.mapManual(map => [...callout].some(letter => map[letter as CalloutLetter]))])
 	) as Record<Callout3D, State.Generator<boolean>>
-	function getTruthDupedState (truth: Callout3D) {
-		return truthsCallout.mapManual(truths => {
-			return [...truth].some(letter => truths.flatMap(callout => [...callout]).filter(l => l === letter).length > 2)
-		})
-	}
-	const hasTruthDupe = State.MapManual(Object.values(truthDupes), (...dupeBools) => dupeBools.includes(true))
+	const hasTruthDupe = truthDupesMap.mapManual(dupes => Object.values(dupes).includes(true))
 
 	const getTruthState = (): CardState => (
 		typedTruthCallout.value === '' && truthsCallout.value.every(callout => callout === '  ') ? 'reset'
