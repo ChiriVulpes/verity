@@ -4,6 +4,7 @@ title: Verity
 subtitle: deepsight.gg
 more:
 	Hold {#CODE:Escape} to reset.
+	Press {#CODE:Space} to toggle Doubled shapes.
 	Icons from {#LINK(www.reddit.com/r/destiny2/comments/1deahpk/salvations_edge_verity_shape_guide_reference/):Verity Shape Guide Reference} by Nec.
 	Lore from {#LINK(youtu.be/iUpnkcRFGHw):The Hidden Truth Behind Verity} by Abaddon.
 
@@ -11,6 +12,8 @@ more:
 display-mode/full: Display Mode: Full
 display-mode/compact: Display Mode: Compact
 display-mode/icons: Display Mode: Icons
+truth-mode/default: Truth: Default Shapes
+truth-mode/doubled: Truth: Doubled Shapes
 
 # shape
 orbicular: Orbicular
@@ -57,10 +60,12 @@ description: {#B:Each prisoner must obtain the other two Shadows} from the other
 # card/outside-goal
 title: Leaving the Door Open
 description: To bring your fireteam out into reality, their statue in reality must match the prisoner's understanding of the Truth. {#B:Dissect two three-dimensional shapes with Shadow components to swap those components between the two prisoners' statues.} This process must be repeated until all statues hold the prisoners' True shapes.
-has-dupe/title: No way out...
-has-dupe/description: {#B:One or more callouts were incorrect or miscommunicated.}
-compact/placeholder/title: The silence is deafening...
-compact/placeholder/description: Fill out The Shadows and The Reality callouts to get a solution.
+
+message/has-dupe/title: No way out...
+message/truth/title: The door should be open...?
+message/shared/issue/description: {#B:One or more callouts were incorrect or miscommunicated.}
+message/placeholder/title: The silence is deafening...
+message/placeholder/description: Fill out The Shadows and The Reality callouts to get a solution.
 
 path/ogres: Stop the ogres to summon more Splintered Curators.
 path/left: {#ICON:left} left

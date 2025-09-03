@@ -70,3 +70,21 @@
 				&--side:
 					%colour-2
 					%italic-2
+
+			&-result-callout:
+				#after: .callout-text
+				%font-7
+				%uppercase
+				%weight-bold
+				%column-1-2
+				%justify-self-centre
+				%margin-top-2
+				%padding-0
+				%justify-content-centre
+				%flex
+				%gap-2
+
+				&-truth:
+					%flex
+					%gap-1
+					%text-align-centre

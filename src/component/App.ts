@@ -16,6 +16,11 @@ export default Component(component => {
 	displayModeSetting.useManual(setting => !setting ? localStorage.removeItem('displayMode') : localStorage.setItem('displayMode', setting))
 	const displayMode = displayModeSetting.mapManual(setting => setting ?? 'full')
 
+	type TruthMode = 'default' | 'doubled'
+	const truthModeSetting = State<TruthMode | null>(localStorage.getItem('truthMode') as TruthMode | null)
+	truthModeSetting.useManual(setting => !setting ? localStorage.removeItem('truthMode') : localStorage.setItem('truthMode', setting))
+	const truthMode = truthModeSetting.mapManual(setting => setting ?? 'default')
+
 	Component()
 		.style('app-header')
 		.append(Component()
@@ -46,7 +51,26 @@ export default Component(component => {
 				}[displayMode.value]
 			})
 		)
+		.append(Button()
+			.style('app-settings-button')
+			.text.bind(truthMode.mapManual(truthMode => quilt => quilt[`settings/truth-mode/${truthMode}`]()))
+			.event.subscribe('click', () => {
+				truthModeSetting.value = {
+					default: 'doubled' as const,
+					doubled: 'default' as const,
+				}[truthMode.value]
+			})
+		)
 		.appendTo(app)
+
+	InputBus.event.subscribe('Down', (event, input) => {
+		if (input.use(' ')) {
+			truthModeSetting.value = {
+				default: 'doubled' as const,
+				doubled: 'default' as const,
+			}[truthMode.value]
+		}
+	})
 
 	////////////////////////////////////
 	//#region Reset
@@ -134,9 +158,13 @@ export default Component(component => {
 			card.style.bind(card.hasFocused, 'app-card--focus')
 		}
 
-		card.header.style('app-card-header')
+		card.header
+			.style('app-card-header')
 			.style.bind(displayMode.notEquals('full'), 'app-card-header--compact')
-		card.description.appendToWhen(displayMode.equals('full'), card)
+		card.description
+			.style('app-card-description')
+			.appendToWhen(displayMode.equals('full'), card)
+
 		cards.push(card)
 		return card
 	})
@@ -513,7 +541,7 @@ export default Component(component => {
 	Card(null)
 		.tweak(card => card.headerText.set(quilt => quilt['card/inside-goal/title']()))
 		.tweak(card => card.descriptionText.set(quilt => quilt['card/inside-goal/description']()))
-		.appendToWhen(displayMode.equals('full'), app)
+		.appendToWhen(State.Every(app, displayMode.equals('full'), truthMode.notEquals('doubled')), app)
 
 	type TruthsState = `${Callout3D}${Callout3D}${Callout3D}`
 	interface Node {
@@ -619,17 +647,20 @@ export default Component(component => {
 	////////////////////////////////////
 	//#region Path
 
+	const canFitExtraStuffInPathCard = State.Every(app, displayMode.equals('full'), truthMode.notEquals('doubled'))
 	Card(null)
 		.tweak(card => card.headerText.set(quilt => quilt['card/outside-goal/title']()))
 		.tweak(card => card.descriptionText.set(quilt => quilt['card/outside-goal/description']()))
-		.append(Slot().use(State.UseManual({ shadowCallout, truthsCallout, hasShadowDupe, hasTruthDupe }), (slot, { shadowCallout, truthsCallout, hasShadowDupe, hasTruthDupe }) => {
+		.tweak(card => card.description.style.bind(truthMode.equals('doubled'), 'app-card-description--hidden'))
+		.tweak(card => card.header.style.bind(truthMode.equals('doubled'), 'app-card-header--doubled'))
+		.append(Slot().use(State.UseManual({ truthMode, shadowCallout, truthsCallout, hasShadowDupe, hasTruthDupe, canFitExtraStuffInPathCard }), (slot, { truthMode, shadowCallout, truthsCallout, hasShadowDupe, hasTruthDupe }) => {
 			if (hasShadowDupe || hasTruthDupe) {
 				Component()
 					.style('app-card-heading')
-					.text.set(quilt => quilt['card/outside-goal/has-dupe/title']())
+					.text.set(quilt => quilt['card/outside-goal/message/has-dupe/title']())
 					.appendTo(slot)
 				Paragraph().and(Lore)
-					.text.set(quilt => quilt['card/outside-goal/has-dupe/description']())
+					.text.set(quilt => quilt['card/outside-goal/message/shared/issue/description']())
 					.appendTo(slot)
 				return
 			}
@@ -637,26 +668,60 @@ export default Component(component => {
 			if (shadowCallout.replaceAll(' ', '').length < 3 || truthsCallout.join('').replaceAll(' ', '').length < 6) {
 				Component()
 					.style('app-card-heading')
-					.text.set(quilt => quilt['card/outside-goal/compact/placeholder/title']())
-					.appendToWhen(displayMode.notEquals('full'), slot)
+					.text.set(quilt => quilt['card/outside-goal/message/placeholder/title']())
+					.appendTo(slot)
 				Paragraph().and(Lore)
-					.text.set(quilt => quilt['card/outside-goal/compact/placeholder/description']())
-					.appendToWhen(displayMode.notEquals('full'), slot)
+					.text.set(quilt => quilt['card/outside-goal/message/placeholder/description']())
+					.appendTo(slot)
 				return
 			}
 
 			// calc time
-			const targetMap: Record<CalloutLetter, Callout3D> = {
-				c: 'st',
-				s: 'ct',
-				t: 'cs',
-			}
-			const target = [...shadowCallout].map(letter => targetMap[letter as CalloutLetter]).join('') as TruthsState
 			const initial = truthsCallout.map(c => [...c].sort().join('')).join('') as TruthsState
 
-			const path = findPath(initial, target, null)?.path
-			if (!path)
+			const potentialTargetMaps: Record<CalloutLetter, Callout3D>[] = []
+			if (truthMode === 'default')
+				potentialTargetMaps.push({
+					c: 'st',
+					s: 'ct',
+					t: 'cs',
+				})
+			else
+				potentialTargetMaps.push(
+					{
+						c: 'ss',
+						s: 'tt',
+						t: 'cc',
+					},
+					{
+						c: 'tt',
+						s: 'cc',
+						t: 'ss',
+					},
+				)
+
+			const paths: [Path, TruthsState][] = []
+			for (const potentialTargetMap of potentialTargetMaps) {
+				const target = [...shadowCallout].map(letter => potentialTargetMap[letter as CalloutLetter]).join('') as TruthsState
+				const path = findPath(initial, target, null)
+				if (path) paths.push([path, target])
+			}
+
+			const [bestPath, target] = paths.sort(([a], [b]) => a.cost - b.cost).at(0) ?? [null, null]
+			if (!bestPath || !target)
 				throw new Error('No path found????')
+
+			const path = bestPath.path
+			if (!bestPath.cost) {
+				Component()
+					.style('app-card-heading')
+					.text.set(quilt => quilt['card/outside-goal/message/truth/title']())
+					.appendToWhen(displayMode.notEquals('full'), slot)
+				Paragraph().and(Lore)
+					.text.set(quilt => quilt['card/outside-goal/message/shared/issue/description']())
+					.appendToWhen(displayMode.notEquals('full'), slot)
+				return
+			}
 
 			const wrapper = Component()
 				.style('path')
@@ -810,6 +875,23 @@ export default Component(component => {
 					)
 				)
 				.appendToWhen(displayMode.equals('icons'), wrapper)
+
+			if (truthMode === 'doubled')
+				Component()
+					.style('path-swap-instructions-result-callout')
+					.append(Component()
+						.style('path-swap-instructions-result-callout-truth')
+						.append(...[...target.slice(0, 2)].map(l => Component().text.set(l)))
+					)
+					.append(Component()
+						.style('path-swap-instructions-result-callout-truth')
+						.append(...[...target.slice(2, 4)].map(l => Component().text.set(l)))
+					)
+					.append(Component()
+						.style('path-swap-instructions-result-callout-truth')
+						.append(...[...target.slice(4, 6)].map(l => Component().text.set(l)))
+					)
+					.appendTo(wrapper)
 		}))
 		.appendTo(app)
 
